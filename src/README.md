@@ -1,6 +1,6 @@
 This is a target test repo for pushing from one to another via a Workflow.
 
-The workflows which push to this repo can be found in
+The workflow which pushes to this repo can be found in
 [waylan/test-repo-source](https://github.com/waylan/test-repo-source).
 
 This repo should contain only two files. This README and a file with a
