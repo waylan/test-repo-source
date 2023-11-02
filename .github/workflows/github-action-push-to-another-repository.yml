@@ -1,0 +1,27 @@
+name: manual deploy
+
+on:
+  workflow_dispatch
+
+jobs:
+
+  github-action-push-to-another-repository:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v1
+        with:
+          python-version: 3.11
+      - name: Build
+        run: |
+          python build.py
+      - name: Publish
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
+        with:
+          source-directory: 'output'
+          destination-github-username: 'waylan'
+          destination-repository-name: 'test-repo-target'
+          user-name: ${{ github.actor }}
+          target-branch: master
