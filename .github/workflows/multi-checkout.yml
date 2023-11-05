@@ -1,0 +1,34 @@
+name: multi-checkout
+
+on:
+  workflow_dispatch
+
+jobs:
+
+  multi-checkout:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Repo
+        uses: actions/checkout@v4
+        with:
+          path: source
+      - name: Checkout Target Repo
+        uses: actions/checkout@v4
+        with:
+          ssh-key: ${{ secrets.SSH_DEPLOY_KEY }}
+          repository: waylan/test-repo-target
+          path: target
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - name: Install Dependencies
+        run: |
+          pip install ghp-import
+      - name: Build
+        run: |
+          cd source
+          python build.py
+      - name: Publish
+        run: |
+          cd target
+          ghp-import -p -n -b master ../source/output/
